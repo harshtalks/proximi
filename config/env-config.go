@@ -7,10 +7,10 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func ConfigureENV(fileName string) {
+func ConfigureENV() {
 	// Loading envs
 
-	configureError := godotenv.Load(fileName)
+	configureError := godotenv.Load()
 
 	if configureError != nil {
 		fmt.Println("An error occured while loading the env file.")
