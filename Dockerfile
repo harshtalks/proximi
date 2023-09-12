@@ -28,7 +28,7 @@ WORKDIR /root/
 
 COPY --from=builder /App/main .
 
-EXPOSE 8080
+EXPOSE 3000
 
 # RUN
 
