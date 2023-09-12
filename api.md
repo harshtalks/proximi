@@ -30,3 +30,7 @@ proximi is an api service that delivers nearby services to the users. Using Prox
 
 we have applied a rate limiter to make our service always available, and keep our downtime as zero.
 check header to see the limit.
+
+### Checkout our better API DOC
+
+[https://bump.sh/harshtalks/doc/proximi/](https://bump.sh/harshtalks/doc/proximi/)

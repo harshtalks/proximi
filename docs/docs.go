@@ -104,6 +104,11 @@ const docTemplate = `{
         },
         "/api/businesses/:businessId": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "# Business\n\nUse this API to get indiviudal Business details\n\n## Params\n",
                 "tags": [
                     "Businesses"
@@ -406,11 +411,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:3000",
+	Host:             "",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Proximi",
-	Description:      "# Proximi\n\nproximi is an api service that delivers nearby services to the users. Using Proximi, one can find out nearby businesses with specified range.\n\n## Tech Stack\n\n- Go\n- REST APIs\n- Postgres\n- ORM\n- GeoHashing\n- JWT based custom Auth\n\n## Features\n\n- Rate Limiting\n- Authentication\n- Pagination\n- Geocoding\n- Distance from the business.\n\n## Procedure\n\n- First of all, signin/signup from /auth endpoints to get the auth token (Authenticate Yourself)\n- once received the token, copy the token and click on Authorize button to login urself.\n- the format is `Bearer <your-token>`\n- once upon verification of the token, you will be able to access protected routes such as /api endpoints\n\n## Important\n\nwe have applied a rate limiter to make our service always available, and keep our downtime as zero.\ncheck header to see the limit.\n",
+	Description:      "# Proximi\n\nproximi is an api service that delivers nearby services to the users. Using Proximi, one can find out nearby businesses with specified range.\n\n## Tech Stack\n\n- Go\n- REST APIs\n- Postgres\n- ORM\n- GeoHashing\n- JWT based custom Auth\n\n## Features\n\n- Rate Limiting\n- Authentication\n- Pagination\n- Geocoding\n- Distance from the business.\n\n## Procedure\n\n- First of all, signin/signup from /auth endpoints to get the auth token (Authenticate Yourself)\n- once received the token, copy the token and click on Authorize button to login urself.\n- the format is `Bearer <your-token>`\n- once upon verification of the token, you will be able to access protected routes such as /api endpoints\n\n## Important\n\nwe have applied a rate limiter to make our service always available, and keep our downtime as zero.\ncheck header to see the limit.\n\n### Checkout our better API DOC\n\n[https://bump.sh/harshtalks/doc/proximi/](https://bump.sh/harshtalks/doc/proximi/)\n",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

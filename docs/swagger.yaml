@@ -79,7 +79,6 @@ definitions:
       username:
         type: string
     type: object
-host: localhost:3000
 info:
   contact:
     email: harshpareek91@gmail.com
@@ -117,6 +116,10 @@ info:
 
     we have applied a rate limiter to make our service always available, and keep our downtime as zero.
     check header to see the limit.
+
+    ### Checkout our better API DOC
+
+    [https://bump.sh/harshtalks/doc/proximi/](https://bump.sh/harshtalks/doc/proximi/)
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -256,6 +259,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/handlers.ErrorModel'
+      security:
+      - ApiKeyAuth: []
       summary: get details of a business
       tags:
       - Businesses
