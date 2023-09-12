@@ -1,7 +1,6 @@
 package main
 
 import (
-	"app/config"
 	"app/database"
 	"app/router"
 	"fmt"
@@ -30,7 +29,7 @@ import (
 func main() {
 
 	// 1. Loading ENVs
-	config.ConfigureENV()
+	// config.ConfigureENV()
 
 	// 2. Creating an instance of fiber app
 	fmt.Println("New Fiber app is instanitiated...")
