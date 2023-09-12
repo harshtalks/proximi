@@ -1,15 +1,341 @@
 basePath: /
-host: localhost:8080
+definitions:
+  handlers.DocBusinessModel:
+    properties:
+      address:
+        type: string
+      attributes:
+        additionalProperties: true
+        type: object
+      business_id:
+        type: string
+      categories:
+        type: string
+      city:
+        type: string
+      geoHash:
+        type: string
+      hours:
+        additionalProperties: true
+        type: object
+      is_open:
+        type: integer
+      latitude:
+        type: number
+      longitude:
+        type: number
+      name:
+        type: string
+      postal_code:
+        type: string
+      review_count:
+        type: integer
+      stars:
+        type: number
+      state:
+        type: string
+      userID:
+        type: integer
+    type: object
+  handlers.ErrorModel:
+    properties:
+      message:
+        example: internal server error
+        type: string
+      status:
+        example: error
+        type: string
+      status_code:
+        example: 500
+        type: integer
+    type: object
+  handlers.SigninInput:
+    properties:
+      password:
+        type: string
+      username:
+        example: harshtalks
+        type: string
+    type: object
+  handlers.SigninSuccessResponse:
+    properties:
+      data:
+        $ref: '#/definitions/handlers.SuccessData'
+      status:
+        example: success
+        type: string
+      status_code:
+        example: 200
+        type: integer
+    type: object
+  handlers.SuccessData:
+    properties:
+      createdAt:
+        type: string
+      token:
+        type: string
+      userId:
+        type: integer
+      username:
+        type: string
+    type: object
+host: localhost:3000
 info:
   contact:
-    email: fiber@swagger.io
+    email: harshpareek91@gmail.com
     name: API Support
-  description: This is a sample swagger for Fiber
+  description: |
+    # Proximi
+
+    proximi is an api service that delivers nearby services to the users. Using Proximi, one can find out nearby businesses with specified range.
+
+    ## Tech Stack
+
+    - Go
+    - REST APIs
+    - Postgres
+    - ORM
+    - GeoHashing
+    - JWT based custom Auth
+
+    ## Features
+
+    - Rate Limiting
+    - Authentication
+    - Pagination
+    - Geocoding
+    - Distance from the business.
+
+    ## Procedure
+
+    - First of all, signin/signup from /auth endpoints to get the auth token (Authenticate Yourself)
+    - once received the token, copy the token and click on Authorize button to login urself.
+    - the format is `Bearer <your-token>`
+    - once upon verification of the token, you will be able to access protected routes such as /api endpoints
+
+    ## Important
+
+    we have applied a rate limiter to make our service always available, and keep our downtime as zero.
+    check header to see the limit.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
   title: Proximi
   version: "1.0"
-paths: {}
+paths:
+  /api/businesses:
+    get:
+      description: |
+        # Businesses API
+
+        Use this API to access businesses nearby you, based on latitude and longitude you provide.
+
+        ## Params
+
+        ### 1. Lat
+
+        - Latitude of the location of the user (string value)
+        - Required
+
+        ### 2. Long
+
+        - Longitude of the location of the user (string value)
+        - Required
+
+        ### 3. range
+
+        - Range of the result
+        - You can specify the range in kilometers
+        - default is the area of radius .5kms to 2kms
+        - optional
+
+        ### 4. page
+
+        - This API is paginated.
+        - default page number is 1
+        - optional
+
+        ### 5. perPage
+
+        - per page results
+        - default is 10
+        - max is 100
+        - minimum is 10
+        - optional
+      parameters:
+      - default: "23983.2"
+        description: string value of latitude
+        in: query
+        name: lat
+        required: true
+        type: string
+      - default: "-29829.09"
+        description: string value of longitude
+        in: query
+        name: long
+        required: true
+        type: string
+      - description: specify range of results
+        in: query
+        name: range
+        type: string
+      - description: page number
+        in: query
+        name: page
+        type: string
+      - description: number of results per page
+        in: query
+        maximum: 100
+        minimum: 10
+        name: perPage
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.DocBusinessModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorModel'
+        "412":
+          description: Precondition Failed
+          schema:
+            $ref: '#/definitions/handlers.ErrorModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorModel'
+      security:
+      - ApiKeyAuth: []
+      summary: get businesses near you
+      tags:
+      - Businesses
+  /api/businesses/:businessId:
+    get:
+      description: |
+        # Business
+
+        Use this API to get indiviudal Business details
+
+        ## Params
+      parameters:
+      - description: Id of the business
+        in: path
+        name: businessId
+        required: true
+        type: string
+      - description: latitude of your current location
+        in: query
+        name: lat
+        type: string
+      - description: longitude of your current location
+        in: query
+        name: long
+        type: string
+      - description: your mode of travel
+        enum:
+        - '"driving"'
+        - '"walking"'
+        - '"public transit"'
+        in: query
+        name: travelMode
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorModel'
+      summary: get details of a business
+      tags:
+      - Businesses
+  /auth/signin:
+    post:
+      consumes:
+      - application/json
+      description: Signin with username and password, you will receive a token which
+        u will have to provide in the header of subsequent requests at /api gateway
+      parameters:
+      - description: username and password input
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.SigninInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.SigninSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorModel'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorModel'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorModel'
+      summary: Basic token based Auth
+      tags:
+      - Auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: Signup with username and password, you will receive a token which
+        u will have to provide in the header of subsequent requests at /api gateway
+      parameters:
+      - description: username and password input
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.SigninInput'
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorModel'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/handlers.ErrorModel'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorModel'
+      summary: For new User
+      tags:
+      - Auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

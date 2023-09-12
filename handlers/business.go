@@ -9,6 +9,21 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// @Tags Businesses
+//
+// @Router /api/businesses/:businessId [get]
+// @Summary get details of a business
+// @description.markdown individualBusiness.md
+//
+// @Param businessId path string true "Id of the business"
+// @Param lat query string false "latitude of your current location"
+// @Param long query string false "longitude of your current location"
+// @Param travelMode query string false "your mode of travel" Enums("driving", "walking", "public transit")
+//
+// @failure 404,500 {object} ErrorModel
+// @Success 200 {object} map[string]interface{}
+//
+// @Security ApiKeyAuth
 func Business(context *fiber.Ctx) error {
 	businessId := context.Params("businessId")
 

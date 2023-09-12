@@ -13,16 +13,20 @@ import (
 	"github.com/gofiber/swagger"
 )
 
-// @title Proximi
-// @version 1.0
-// @description Proximi service
-// @termsOfService http://swagger.io/terms/
-// @contact.name API Support
-// @contact.email harshpareek91@gmail.com
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-// @host localhost:3000
-// @BasePath /
+// @title		Proximi
+// @description.markdown api
+// @version	1.0
+// @termsOfService	http://swagger.io/terms/
+// @contact.name	API Support
+// @contact.email	harshpareek91@gmail.com
+// @license.name	Apache 2.0
+// @license.url	http://www.apache.org/licenses/LICENSE-2.0.html
+// @host			localhost:3000
+// @BasePath		/
+//
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 
 	// 1. Loading ENVs
@@ -55,26 +59,3 @@ func main() {
 	app.Listen(":3000")
 
 }
-
-// func getDistance() {
-// 	apiKey := os.Getenv("BING_KEY")
-// 	origin := "47.6062,-122.3321"      // Latitude and longitude of the origin
-// 	destination := "37.7749,-122.4194" //
-// 	url := fmt.Sprintf("https://dev.virtualearth.net/REST/v1/Routes/DistanceMatrix?origins=%s&destinations=%s&travelMode=driving&key=%s", origin, destination, apiKey)
-
-// 	response, err := http.Get(url)
-
-// 	if err != nil {
-// 		fmt.Println("Error making the HTTP request:", err)
-// 		return
-// 	}
-
-// 	body, err := ioutil.ReadAll(response.Body)
-// 	if err != nil {
-// 		fmt.Println("Error reading the response body:", err)
-// 		return
-// 	}
-
-// 	fmt.Println(string(body))
-
-// }

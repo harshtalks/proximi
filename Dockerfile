@@ -1,6 +1,6 @@
 # DockerFile for the Proximi App
 
-FROM golang:alpine
+FROM golang:alpine as builder
 
 # Making work directory
 
@@ -10,25 +10,26 @@ WORKDIR /App
 
 COPY . .
 
+# COPY ENV
+
 # Getting go files
 
 RUN go get
 
-# ENV Arguments
-
-ARG JWT_SECRET
-ARG DATABASE_HOST
-ARG DATABASE_PASSWORD
-ARG DATABASE_PORT
-ARG DATABASE_NAME
-ARG DATABASE_USER
-ARG BING_KEY
-ARG BING_URL
-
 # BUILD
 
-RUN go build -o bin .
+RUN go build -o main .
+
+# Stage Building
+
+FROM alpine:latest
+
+WORKDIR /root/
+
+COPY --from=builder /App/main .
+
+EXPOSE 8080
 
 # RUN
 
-ENTRYPOINT [ "/App/bin" ]
+CMD [ "./main" ]

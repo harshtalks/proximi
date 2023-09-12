@@ -9,6 +9,22 @@ import (
 	"github.com/mmcloughlin/geohash"
 )
 
+// @Tags Businesses
+//
+// @Router /api/businesses [get]
+// @Summary get businesses near you
+// @description.markdown businesses
+//
+// @Param lat query string true "string value of latitude" default(23983.2)
+// @Param long query string true "string value of longitude" default(-29829.09)
+// @Param range query string false "specify range of results"
+// @Param page query string false "page number"
+// @Param perPage query int false "number of results per page" maximum(100) minimum(10)
+//
+// @Success 200 {object} DocBusinessModel
+// @failure 412,400,500 {object} ErrorModel
+//
+// @Security ApiKeyAuth
 func Businesses(context *fiber.Ctx) error {
 	// Get the Latitude and Longitude from the queries
 
@@ -41,6 +57,7 @@ func Businesses(context *fiber.Ctx) error {
 	if radiusErr != nil {
 		radius = 2
 	}
+	print("radisu", radius)
 
 	hashLength := utils.GetGeoHashLength(radius)
 
